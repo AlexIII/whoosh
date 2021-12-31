@@ -1,0 +1,38 @@
+{
+  "name": "whoosh-react",
+  "version": "1.0.1",
+  "description": "minimalistic React state manager",
+  "main": "dist/whoosh.js",
+  "types": "dist/whoosh.d.ts",
+  "files": [
+    "dist",
+    "docs",
+    "readme.md",
+    "LICENSE"
+  ],
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "scripts": {
+    "build": "tsc && terser --compress --mangle -o dist/whoosh.js -- dist/whoosh.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexIII/whoosh.git"
+  },
+  "keywords": [
+    "react",
+    "state",
+    "manager"
+  ],
+  "author": "AlexIII",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlexIII/whoosh/issues"
+  },
+  "homepage": "https://github.com/AlexIII/whoosh#readme",
+  "devDependencies": {
+    "terser": "^5.10.0",
+    "typescript": "^4.5.4"
+  }
+}

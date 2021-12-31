@@ -1,0 +1,18 @@
+{
+    "include": [
+        "whoosh.ts"
+    ],
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es2015",
+        "declaration": true,
+        "outDir": "./dist",
+        
+        "noImplicitAny": true,
+        "alwaysStrict": true,
+        "strictNullChecks": true,
+        "strict": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noUnusedLocals": true
+    }
+}
