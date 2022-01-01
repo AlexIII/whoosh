@@ -2,6 +2,8 @@
 
 ## Reducer advanced usage
 
+[This example on codesandbox.io](https://codesandbox.io/s/reducer-music-genres-2-dpwv3)
+
 The optional reducer parameter of the `createShared()` function is the main source of Whoosh versatility and extendability.
 It allows for gradual build-up of complexity without breaking the existing code. In this example we'll try to demonstrate it.
 

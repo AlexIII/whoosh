@@ -1,6 +1,6 @@
 /* Whoosh createShared wrapper that saves/restores the Shared State to/from the `localStorage` */
 
-import { createShared, SharedState } from '../dist/whoosh';
+import { createShared, SharedState } from 'whoosh-react';
 
 const localStorageSet = <T>(key: string, value: T) => {
     if(value === undefined) localStorage.removeItem(key);

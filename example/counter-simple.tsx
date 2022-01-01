@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 
 /* Create Counter */
 
-import { createShared } from '../dist/whoosh';
+import { createShared } from 'whoosh-react';
 const appCounter = createShared<number>(0);
 
 /* Use Counter */

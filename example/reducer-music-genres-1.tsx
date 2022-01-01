@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 
 /* Create Shared State */
 
-import { createShared } from '../dist/whoosh';
+import { createShared } from 'whoosh-react';
 
 const userGenres = createShared<Array<string>>([]);
 

@@ -33,6 +33,8 @@ and than 1 Kbyte in minimized form.
 
 ### Counter
 
+[This example on codesandbox.io](https://codesandbox.io/s/whoosh-counter-simple-yejzt?file=/src/App.tsx)
+
 1. Create Shared State
 
 ```tsx
@@ -88,6 +90,8 @@ const RootComponent = () => (
 ```
 
 ### Counter with Reducer
+
+[This example on codesandbox.io](https://codesandbox.io/s/whoosh-counter-reducer-4kwrn?file=/src/App.tsx)
 
 `createShared()` has the second optional parameter which is a Reducer function.
 
