@@ -2,6 +2,8 @@
 
 **Whoosh** is a React state manager which entire API consists of exactly _one_ function - `createShared()`.
 
+[TL;DR version of the docs](tldr.md)
+
 ### Navigation
 
 - [Mindset](#mindset)
@@ -147,7 +149,7 @@ Refer to [this tutorial](docs/reducer-advanced.md) on advanced reducer usage in 
 `createShared()` returns a Shared State object with the next interface
 
 ```ts
-// S - state type
+// S - State type
 // A - Reducer input type (if Reducer is present)
 
 interface SharedState<S, A = S> {
@@ -158,6 +160,8 @@ interface SharedState<S, A = S> {
     off(cb: (state: S) => void): void;          // Unsubscribe off the state change
 }
 
+// Two overloads of `createShared()`: without and with the reducer parameter
+function createShared<S>(initialState: S): SharedState<S, S>;
 function createShared<S, A>(initialState: S, reducer: (previousState: S, input: A) => S): SharedState<S, A>;
 ```
 
