@@ -5,16 +5,18 @@
 The `on()` and `off()` functions of the Shared State can be used to enforce coherence of several Shared States
 
 ```ts
-    const selectorIsEnabled = createShared<boolean>(false);
-    const selectedIds = createShared<string[]>([]);
+import { createShared } from 'whoosh-react';
 
-    // Set `selectedIds` to empty array when `selectorIsEnabled` becomes false
-    selectorIsEnabled.on(isEnabled => {
-        if(!isEnabled) selectedIds.set([]);
-    });
+const selectorIsEnabled = createShared<boolean>(false);
+const selectedIds = createShared<string[]>([]);
 
-     // Set `selectorIsEnabled` to true when `selectedIds` length becomes more than zero
-    selectedIds.on(ids => {
-        if(ids.length > 0 && !selectorIsEnabled.get()) selectorIsEnabled.set(true); 
-    });
+// Set `selectedIds` to empty array when `selectorIsEnabled` becomes false
+selectorIsEnabled.on(isEnabled => {
+    if(!isEnabled) selectedIds.set([]);
+});
+
+// Set `selectorIsEnabled` to true when `selectedIds` length becomes more than zero
+selectedIds.on(ids => {
+    if(ids.length > 0 && !selectorIsEnabled.get()) selectorIsEnabled.set(true); 
+});
 ```

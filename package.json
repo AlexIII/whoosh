@@ -1,6 +1,6 @@
 {
   "name": "whoosh-react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "minimalistic React state manager",
   "main": "dist/whoosh.js",
   "types": "dist/whoosh.d.ts",
@@ -14,7 +14,7 @@
     "react": ">=16"
   },
   "scripts": {
-    "build": "tsc && terser --compress --mangle -o dist/whoosh.js -- dist/whoosh.js"
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -32,7 +32,10 @@
   },
   "homepage": "https://github.com/AlexIII/whoosh#readme",
   "devDependencies": {
-    "terser": "^5.10.0",
+    "@types/react": "^17.0.38",
+    "rollup": "^2.62.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.31.1",
     "typescript": "^4.5.4"
   }
 }

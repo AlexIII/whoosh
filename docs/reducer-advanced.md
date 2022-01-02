@@ -2,8 +2,6 @@
 
 ## Reducer advanced usage
 
-[This example on codesandbox.io](https://codesandbox.io/s/reducer-music-genres-2-dpwv3)
-
 The optional reducer parameter of the `createShared()` function is the main source of Whoosh versatility and extendability.
 It allows for gradual build-up of complexity without breaking the existing code. In this example we'll try to demonstrate it.
 
@@ -63,14 +61,14 @@ Let's refactor the logic of adding/removing one element to/from the array out of
 For that you can write a reducer like this, and then apply it to the existing Shared State:
 
 ```ts
-const ArrayAddRemoveReducer = (prev: string[], input: { add?: string; remove?: string; }): string[] => {
+const arrayAddRemoveReducer = (prev: string[], input: { add?: string; remove?: string; }): string[] => {
     let copy = [...prev];
     if(input.add) copy.push(input.add);
     if(input.remove) copy = copy.filter(g => g !== input.remove);
     return copy;
 };
 
-const userGenres = createShared([], ArrayAddRemoveReducer);
+const userGenres = createShared([], arrayAddRemoveReducer);
 ```
 
 Now `onChangeCheckbox` and `onClickBin` can be rewritten in much more verbose fashion.
@@ -96,7 +94,7 @@ You cannot afford to refactor every usage of `userGenres` in the project in one 
 You can simply support the 'old' API in your reducer.
 
 ```ts
-const ArrayAddRemoveReducer = (prev: string[], input: (string[] | { add?: string; remove?: string; })): string[] => {
+const arrayAddRemoveReducer = (prev: string[], input: (string[] | { add?: string; remove?: string; })): string[] => {
     if(input instanceof Array) return input;
     let copy = [...prev];
     if(input.add) copy.push(input.add);
@@ -111,40 +109,16 @@ Say, now we want our `userGenres` to be persistent between the page refreshes or
 Storing `userGenres` serialized array in the [`localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) is one way to do that.
 Of course, we could simply add store/load functionality in the existing reducer.
 But it is not unreasonable to think, we may want to reuse it with some other Shared State besides `userGenres`.
-In order to achieve that we will write our own wrapper over `createShared()`.
-It is actually super easy to do in plain JS, but the typescript version is a little too involved for this tutorial, 
-you can find that full version in the [separate file](../example/createSharedInLocalStorage.ts).
 
-Here is the plain JS version without the type definitions:
-
-```js
-// Prepare functions that do serialization/de-serialization
-const localStorageSet = (key, value) => {
-    if(value === undefined) localStorage.removeItem(key);
-    else localStorage.setItem(key, JSON.stringify(value));
-};
-const localStorageGet = (key, defaultValue) => {
-    const str = localStorage.getItem(key);
-    if(str) try { return JSON.parse(str); } catch {}
-    return defaultValue;
-};
-
-// Implement `createShared` wrapper that saves/restores the Shared State to/from the `localStorage`
-export const createSharedInLocalStorage = (key, initialState, reducer) =>
-    createShared(
-        localStorageGet(key, initialState),
-        (previousState, input) => {
-            const result = reducer? reducer(previousState, input) : input;
-            localStorageSet(key, result);
-            return result;
-        }
-    );
-```
-
-And now we simply combine it with our existing reducer.
+Indeed, this is very common functionality and as such, it is is implemented in the Whoosh [Reducer library](reducer-lib.md)
+as a `toLocalStorage()` reducer. We can combine it with our custom `arrayAddRemoveReducer` using `compose()`
+function from the same library that can compose two reducers.
 
 ```ts
-const userGenres = createSharedInLocalStorage<string[]>('userPreferences.genres', [], ArrayAddRemoveReducer);
+import { compose } from 'whoosh-react/reducers';
+const userGenres = createShared<string[], string[] | { add?: string; remove?: string; }>(
+    [], compose(toLocalStorage('userPreferences.genres'), arrayAddRemoveReducer)
+);
 ```
 
 Now this tutorial can finally end!

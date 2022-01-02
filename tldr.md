@@ -75,6 +75,7 @@ const addOne = () => appCounter.set({operation: 'add', arg: 1});
 ```ts
 // S - State type
 // A - Reducer input type (if Reducer is present)
+// I - Initializer input type (if Reducer and Initializer are both present)
 
 interface SharedState<S, A = S> {
     use(): S;                                   // React Hook that returns current state value
@@ -84,9 +85,13 @@ interface SharedState<S, A = S> {
     off(cb: (state: S) => void): void;          // Unsubscribe off the state change
 }
 
-// Two overloads of `createShared()`: without and with the reducer parameter
-function createShared<S>(initialState: S): SharedState<S, S>;
-function createShared<S, A>(initialState: S, reducer: (previousState: S, input: A) => S): SharedState<S, A>;
+type Reducer<S, A> = (previousState: S, input: A) => S;
+type ReducerAndInit<S, A, I> = [ Reducer<S, A>, (initArg: I) => S ];
+type ReducerOrReducerWithInit<S, A> = Reducer<S, A> | ReducerAndInit<S, A, S>;
+
+function createShared<S>(initValue: S, reducer?: ReducerOrReducerWithInit<S, S>): SharedState<S, S>;
+function createShared<S, A>(initValue: S, reducer: ReducerOrReducerWithInit<S, A>): SharedState<S, A>;
+function createShared<S, A, I>(initValue: I, reducer: ReducerAndInit<S, A, I>): SharedState<S, A>;
 ```
 
 ## License

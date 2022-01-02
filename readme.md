@@ -13,8 +13,14 @@
   - [Counter with Reducer](#counter-with-reducer)
   - [Reducer advanced usage](docs/reducer-advanced.md) [separate file]
   - [Shared State Interaction](docs/shared-state-interaction.md) [separate file]
+- [Reducer library](docs/reducer-lib.md) [separate file]
+  - [Reducer `toLocalStorage()`](docs/reducer-lib.md#reducer-tolocalstorage)
+  - [Reducer composition](docs/reducer-lib.md#reducer-composition)
 - [Shared State object API](#shared-state-object-api)
+- [`createShared()` function API](#createshared-function-api)
 - [Usage with class components](#usage-with-class-components)
+- [Changelog](#changelog)
+- [License](#license)
 
 ## Mindset
 
@@ -24,8 +30,8 @@ Whoosh aims to be
 - general and extendable,
 - compact*.
 
-*Whoosh is _very_ small. Its entire source code is under 70 lines (code readability is not sacrificed)
-and than 1 Kbyte in minimized form.
+*Whoosh is _very_ small. Its entire source code is under 80 lines (code readability is not sacrificed)
+and it takes less than 1 Kbyte in minimized form.
 
 ## Installation
 
@@ -159,10 +165,6 @@ interface SharedState<S, A = S> {
     on(cb: (state: S) => void): () => void;     // Subscribe on the state change, returns unsubscribe function
     off(cb: (state: S) => void): void;          // Unsubscribe off the state change
 }
-
-// Two overloads of `createShared()`: without and with the reducer parameter
-function createShared<S>(initialState: S): SharedState<S, S>;
-function createShared<S, A>(initialState: S, reducer: (previousState: S, input: A) => S): SharedState<S, A>;
 ```
 
 - `use()` is a React Hook that will trigger component re-render when the Shared State changes.
@@ -185,12 +187,47 @@ All `SharedState` functions are guaranteed to be _stable_. It’s safe to omit t
 
 All `SharedState` functions do NOT require bind. They are really just _functions_ and NOT class _methods_.
 
+## `createShared()` function API
+
+```ts
+// S - State type
+// A - Reducer input type (if Reducer is present)
+// I - Initializer input type (if Reducer and Initializer are both present)
+
+type Reducer<S, A> = (previousState: S, input: A) => S;
+type ReducerAndInit<S, A, I> = [ Reducer<S, A>, (initArg: I) => S ];
+type ReducerOrReducerWithInit<S, A> = Reducer<S, A> | ReducerAndInit<S, A, S>;
+
+function createShared<S>(initValue: S, reducer?: ReducerOrReducerWithInit<S, S>): SharedState<S, S>;
+function createShared<S, A>(initValue: S, reducer: ReducerOrReducerWithInit<S, A>): SharedState<S, A>;
+function createShared<S, A, I>(initValue: I, reducer: ReducerAndInit<S, A, I>): SharedState<S, A>;
+```
+
+`createShared()` takes two arguments: `initialValue` (required) and `reducer` (optional).
+
+`reducer` is either a Reducer function or a tuple (an array) of two functions,
+first of which is a Reducer and second is an Initializer.
+
 ## Usage with class components
 
 Whoosh primarily targets the "new way" of doing thins in React.
 That is, when the entire application is build using only functional components.
 But, if you have to support a class component, you can manually subscribe `on()` the Shared State change in `componentWillMount()` 
 and unsubscribe `off()` the Shared State change in `componentWillUnmount()`.
+
+## Changelog
+
+`1.0.2`
+
+- Add initializer function to the reducer argument of `createShared()`
+- Add reducer library:
+  - `toLocalStorage()` reducer
+  - `compose()` - a function for reducer composition
+- build with rollup
+
+`1.0.1`
+
+Initial release
 
 ## License
 

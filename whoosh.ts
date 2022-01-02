@@ -17,18 +17,26 @@ export interface SharedState<S, A = S> {
     use(): S;                                   // React Hook
 }
 
-export function createShared<S>(initialState: S): SharedState<S, S>;
-export function createShared<S, A>(initialState: S, reducer: (previousState: S, input: A) => S): SharedState<S, A>;
-export function createShared(initialState: any, reducer?: (previousState: any, input: any) => any): SharedState<any, any> {
-    let curState = initialState;               // Current state
-    const q: ((s: any) => void)[] = [];     // Subscription queue
+type Reducer<S, A> = (previousState: S, input: A) => S;
+type ReducerAndInit<S, A, I> = [ Reducer<S, A>, (initArg: I) => S ];
+type ReducerOrReducerWithInit<S, A> = Reducer<S, A> | ReducerAndInit<S, A, S>;
+
+export function createShared<S>(initValue: S, reducer?: ReducerOrReducerWithInit<S, S>): SharedState<S, S>;
+export function createShared<S, A>(initValue: S, reducer: ReducerOrReducerWithInit<S, A>): SharedState<S, A>;
+export function createShared<S, A, I>(initValue: I, reducer: ReducerAndInit<S, A, I>): SharedState<S, A>;
+
+export function createShared(initValue: any, reducer?: ReducerOrReducerWithInit<any,any>): SharedState<any, any> {
+    const [_reducer, _initializer] = reducer instanceof Array? reducer : [reducer, (v: any) => v];
+
+    let curState = _initializer(initValue);     // Current state
+    const q: ((s: any) => void)[] = [];         // Subscription queue
 
     // Call subscribers
     let updateRequested = false;
     const requestUpdate = () => {
         if(updateRequested) return;
         updateRequested = true;
-        (globalThis.requestAnimationFrame? globalThis.requestAnimationFrame : globalThis.setTimeout)(() => {
+        (globalThis.requestAnimationFrame ?? globalThis.setTimeout)(() => {
             updateRequested = false;
             q.forEach(cb => cb(curState));
         });
@@ -47,7 +55,7 @@ export function createShared(initialState: any, reducer?: (previousState: any, i
         get: () => curState,
         set: s => {
             const input = s instanceof Function? s(curState) : s;
-            const newState = reducer? reducer(curState, input) : input;
+            const newState = _reducer? _reducer(curState, input) : input;
             if(curState !== newState) {
                 curState = newState;
                 requestUpdate();
