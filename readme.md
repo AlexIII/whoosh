@@ -217,7 +217,7 @@ and unsubscribe `off()` the Shared State change in `componentWillUnmount()`.
 
 ## Changelog
 
-`1.0.2`
+`1.0.4`
 
 - Add initializer function to the reducer argument of `createShared()`
 - Add reducer library:

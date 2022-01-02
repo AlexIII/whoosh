@@ -1,10 +1,10 @@
 import typescript from 'rollup-plugin-typescript2';
 import { terser } from "rollup-plugin-terser";
 
-const config = input => ({
+const config = (input, output) => ({
     input,
     output: {
-        file: 'dist/' + input.replace(".ts", ".js"),
+        file: output,
         format: 'cjs'
     },
     plugins: [
@@ -14,6 +14,6 @@ const config = input => ({
 });
 
 export default [
-    config('whoosh.ts'),
-    config('reducers/index.ts'),
+    config('src/whoosh.ts', 'whoosh.js'),
+    config('src/reducers/index.ts', 'reducers/index.js'),
 ];

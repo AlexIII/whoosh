@@ -1,11 +1,13 @@
 {
   "name": "whoosh-react",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "minimalistic React state manager",
-  "main": "dist/whoosh.js",
-  "types": "dist/whoosh.d.ts",
+  "main": "whoosh.js",
+  "types": "whoosh.d.ts",
   "files": [
-    "dist",
+    "whoosh.js",
+    "whoosh.d.ts",
+    "reducers",
     "docs",
     "readme.md",
     "LICENSE"
