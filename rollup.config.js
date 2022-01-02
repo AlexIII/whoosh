@@ -1,11 +1,10 @@
 import typescript from 'rollup-plugin-typescript2';
 import { terser } from "rollup-plugin-terser";
-const path = require('path');
 
 const config = input => ({
     input,
     output: {
-        file: path.join('dist', path.dirname(input), input.replace(".ts", ".js")),
+        file: 'dist/' + input.replace(".ts", ".js"),
         format: 'cjs'
     },
     plugins: [
