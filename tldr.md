@@ -50,7 +50,7 @@ const RootComponent = () => (
 [This example on codesandbox.io](https://codesandbox.io/s/whoosh-counter-reducer-4kwrn?file=/src/App.tsx)
 
 ```jsx
-const appCounter = createShare(
+export const appCounter = createShared(
     // Initial value
     0,
     // Reducer

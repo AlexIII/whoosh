@@ -2,16 +2,16 @@
 
 Whoosh comes with an optional reducer library that offers commonly used generic reducers and reducer-associated utils.
 
-This will extend over time.
+The library is planned to be extended over time.
 
 ### Navigation
-- [Reducer `toLocalStorage()`](reducer-tolocalstorage)
-- [Reducer composition](reducer-composition)
+- [Reducer `toLocalStorage()`](#reducer-tolocalstorage)
+- [Reducer composition](#reducer-composition)
 
 ## Reducer `toLocalStorage()`
 
 `toLocalStorage()` reducer stores Shared State value in the [`localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
-and retries it on the startup.
+and retrieves it on the startup.
 
 ```ts
 import { toLocalStorage } from 'whoosh-react/reducers';
@@ -23,13 +23,13 @@ const appCounter = createShared<number>(0, toLocalStorage('app.my.options.counte
 If no value was saves to the `localStorage` previously, the Shared State will be initialized 
 with `defaultValue` (which is `0` in this example).
 
-Underlying state type should be `JSONable`:
+Underlying state type should be a `JSONable` type:
 ```ts
 type JSONable = boolean | null | undefined | number | string | Array<JSONable> | {[key: string]: JSONable};
 ```
 
-In order to save other objects, such as class instances, a converter to/from `JSONable`
-should be provided to `toLocalStorage()`:
+In order to save other objects, such as a class instance, a converter to/from `JSONable`
+should be provided as the second parameter to `toLocalStorage()`:
 
 ```ts
 class Counter {

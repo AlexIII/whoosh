@@ -51,7 +51,7 @@ import { createShared } from 'whoosh-react';
 
 export const appCounter = createShared<number>(0);
 ```
-`createShared()` accepts an initial value and returns object that represents Shared State.
+`createShared()` accepts an initial value and returns an object that represents Shared State.
 
 2. Use Shared State in React components
 
@@ -103,6 +103,11 @@ const RootComponent = () => (
 
 `createShared()` has the second optional parameter which is a Reducer function.
 
+Reducer is a function of type `(previousValue: S, input: A) => S`. 
+It describes how Shared State of type `S` should be modified based on the `previousValue` and the `input`.
+`input` is the value that was passed to the `appCounter.set()`.
+Notice, that if an invalid input is passed to `set()` a `Error` will be thrown to the caller of `set()`.
+
 ```tsx
 // AppState.ts
 export const appCounter = createShared<number, { operation: 'add' | 'subtract' | 'set'; arg: number; }>(
@@ -118,11 +123,6 @@ export const appCounter = createShared<number, { operation: 'add' | 'subtract' |
     }
 );
 ```
-
-Reducer is a function of type `(previousValue: S, input: A) => S`. 
-It describes how Shared State `S` should be modified based on the `previousValue` and `input`.
-`input` is the value that will be passed to `appCounter.set()`.
-Notice, that if an invalid input is passed to `set()` a `Error` will be thrown from the caller of `set()`.
 
 ```tsx
 // Counter.tsx
@@ -149,6 +149,7 @@ const toggleBetween0and1 = () => appCounter.set(
 
 Refer to [this tutorial](docs/reducer-advanced.md) on advanced reducer usage in Whoosh.
 
+Most common reducers are available (but completely optional) in the [Reducer library](docs/reducer-lib.md)
 
 ## Shared State object API
 
@@ -203,9 +204,9 @@ function createShared<S, A>(initValue: S, reducer: ReducerOrReducerWithInit<S, A
 function createShared<S, A, I>(initValue: I, reducer: ReducerAndInit<S, A, I>): SharedState<S, A>;
 ```
 
-`createShared()` takes two arguments: `initialValue` (required) and `reducer` (optional).
+`createShared()` takes two arguments: an `initialValue` (required) and a `reducer` (optional).
 
-`reducer` is either a Reducer function or a tuple (an array) of two functions,
+The `reducer` is either a Reducer function or a tuple (an array) of two functions,
 first of which is a Reducer and second is an Initializer.
 
 ## Usage with class components
@@ -223,7 +224,7 @@ and unsubscribe `off()` the Shared State change in `componentWillUnmount()`.
 - Add reducer library:
   - `toLocalStorage()` reducer
   - `compose()` - a function for reducer composition
-- build with rollup
+- Build with rollup
 
 `1.0.1`
 
