@@ -1,3 +1,5 @@
+<img align="right" width="110" src="./whoosh-logo.png" />
+
 # Whoosh - minimalistic React state manager
 
 **Whoosh** is a React state manager which entire API consists of exactly _one_ function - `createShared()`.
