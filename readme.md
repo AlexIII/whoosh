@@ -219,6 +219,9 @@ and unsubscribe `off()` the Shared State change in `componentWillUnmount()`.
 
 ## Changelog
 
+`1.0.6`
+- Improve reducer-compose typing
+
 `1.0.5`
 
 - Add reducers `arrayOp` and `setOp` to the reducer library and update docs accordingly
