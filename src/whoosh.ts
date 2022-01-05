@@ -6,7 +6,6 @@
  * License: MIT
 */
 
-// @ts-ignore
 import * as React from 'react';
 
 export interface SharedState<S, A = S> {
@@ -28,8 +27,8 @@ export function createShared<S, A, I>(initValue: I, reducer: ReducerAndInit<S, A
 export function createShared(initValue: any, reducer?: ReducerOrReducerWithInit<any,any>): SharedState<any, any> {
     const [_reducer, _initializer] = reducer instanceof Array? reducer : [reducer, (v: any) => v];
 
-    let curState = _initializer(initValue);     // Current state
-    const q: ((s: any) => void)[] = [];         // Subscription queue
+    let curState = Object.freeze(_initializer(initValue));      // Current state
+    const q: ((s: any) => void)[] = [];                         // Subscription queue
 
     // Call subscribers
     let updateRequested = false;
@@ -57,7 +56,7 @@ export function createShared(initValue: any, reducer?: ReducerOrReducerWithInit<
             const input = s instanceof Function? s(curState) : s;
             const newState = _reducer? _reducer(curState, input) : input;
             if(curState !== newState) {
-                curState = newState;
+                curState = Object.freeze(newState);
                 requestUpdate();
             }
         },

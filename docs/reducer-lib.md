@@ -6,6 +6,7 @@ The library is planned to be extended over time.
 
 ### Navigation
 - [Reducer `toLocalStorage()`](#reducer-tolocalstorage)
+- [Reducer `arrayOp` and `setOp`](#reducer-arrayop-and-setop)
 - [Reducer composition](#reducer-composition)
 
 ## Reducer `toLocalStorage()`
@@ -48,30 +49,78 @@ const appCounter = createShared<Counter>(
 );
 ```
 
+## Reducer `arrayOp` and `setOp`
+
+Reducers `arrayOp` and `setOp` allow for easy element-wise modifications of an `Array` or a `Set` Shared State, respectively.
+
+`arrayOp` adds operations to `remove` and `add` an element, `filter` and `map` the state Array.
+
+`setOp` adds operations to `remove` and `add` an element.
+
+Array example.
+
+```ts
+import { arrayOp, ArrayOpInput } from 'whoosh-react/reducers';
+
+
+// Array of strings state
+type StateType1 = string[];
+const stateArray1 = createShared<StateType1, ArrayOpInput< StateType1 >>([], arrayOp);
+// Array of strings that also can be undefined
+type StateType2 = string[] | undefined;
+const stateArray2 = createShared<StateType2, ArrayOpInput< StateType2 >>(undefined, arrayOp);
+
+// Valid calls of `set()`:
+stateArray1.set([]);
+stateArray1.set(['abc', '123']);
+stateArray1.set(prev => ['abc', '123', ...prev]);
+
+stateArray1.set({remove: 'abc'});
+stateArray1.set({add: '123'});
+stateArray1.set({map: (str, idx) => `${idx}-${str}`});
+stateArray1.set({filter: str => str.length > 0});
+
+stateArray1.set({remove: '123', add: 'abc'});
+
+stateArray2.set(undefined); // stateArray1 cannot be undefined, but stateArray2 can
+```
+
+Set example.
+
+```ts
+import { setOp, SetOpInput } from 'whoosh-react/reducers';
+
+// Set of strings state
+const stateSet1 = createShared<Set<string>, SetOpInput< Set<string> >>(new Set(), setOp);
+// Set of strings that also can be null
+const stateSet2 = createShared<Set<string> | null, SetOpInput< Set<string> | null >>(null, setOp);
+
+// Valid calls of `set()`:
+stateSet1.set(new Set(['abc', '123']));
+stateSet1.set(prev => prev.has('abc')? {add: 'has-abc'} : {remove: '123'});
+
+stateSet2.set(null); // stateSet1 cannot be null, but stateSet2 can
+```
+
+Several operations can be used in the same call of `state.set()`, e.g. `state.set(filter: v => !!v, add: 'abc')`,
+but the order of the operations is predefined and as follows: `remove`, `filter`, `add`, `map`.
+
+
 ## Reducer composition
 
 `compose()` function allows for simple composition of two reducers.
 
-In this example we compose custom reducer and `toLocalStorage()` reducer:
+In this example we compose `arrayOp` reducer and `toLocalStorage()` reducer:
 
 ```ts
-import { toLocalStorage, compose } from 'whoosh-react/reducers';
+import { toLocalStorage, arrayOp, ArrayOpInput, compose } from 'whoosh-react/reducers';
 import { createShared } from 'whoosh-react';
 
-// Custom reducer
-const counterReducer = (previousValue: number, { operation, arg }: { operation: 'add' | 'subtract' | 'set'; arg: number; }) => {
-    switch(operation) {
-        case 'add': return previousValue + arg;
-        case 'subtract': return previousValue - arg;
-        case 'set': return arg;
-    }
-    throw new Error(`appCounter Reducer: operation ${operation} is not supported!`)
-}
 
-const appCounter = createShared<number, { operation: 'add' | 'subtract' | 'set'; arg: number; }>(
-    0, compose(
-        toLocalStorage('app.my.options.counter'),
-        counterReducer
-    )
+const userGenres = createShared<string[], ArrayOpInput<string[]>>(
+    [], compose(toLocalStorage('userPreferences.genres'), arrayOp)
 );
 ```
+
+The `outer` reducer is passed first and the `inner` is second.
+They are going to be composed like this: `newState = outer(prevState, inner(prevState, input))`.

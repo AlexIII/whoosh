@@ -1,6 +1,6 @@
 /* Whoosh localStorage reducer */
 
-const LocalStorageKeyPrefix = 'whoosh.';
+export const LocalStorageKeyPrefix = 'whoosh.';
 
 export type JSONable = boolean | null | undefined | number | string | Array<JSONable> | {[key: string]: JSONable};
 

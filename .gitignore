@@ -5,3 +5,5 @@ whoosh.js
 whoosh.d.ts
 reducers
 whoosh-react-*
+
+!src/*

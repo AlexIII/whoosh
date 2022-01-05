@@ -15,6 +15,7 @@
   - [Shared State Interaction](docs/shared-state-interaction.md) [separate file]
 - [Reducer library](docs/reducer-lib.md) [separate file]
   - [Reducer `toLocalStorage()`](docs/reducer-lib.md#reducer-tolocalstorage)
+  - [Reducer `arrayOp` and `setOp`](docs/reducer-lib.md#reducer-arrayop-and-setop)
   - [Reducer composition](docs/reducer-lib.md#reducer-composition)
 - [Shared State object API](#shared-state-object-api)
 - [`createShared()` function API](#createshared-function-api)
@@ -174,10 +175,10 @@ interface SharedState<S, A = S> {
 
 All other functions are plain js functions. They can be called from anywhere.
 
-- `get()` gets current Shared State value.
+- `get()` gets current Shared State value. It is not allowed to directly modify the returned value in any way. Use `set()` instead.
 
 - `set()` updates Shared State value. Accepts either a new value or a function that accepts previous value and returns the new value. 
- The value should be of type `S` if no reducer is passed to `createShared()` or of type `A` if there is.
+ The new value should be of type `S` if no reducer is passed to `createShared()` or of type `A` if there is.
  (Of course, nothing prevents you having `S === A` which is a very useful case by itself.)
  The call of the function will trigger re-render of the components that are mounted and `use()` this Shared State.
 
@@ -218,6 +219,11 @@ and unsubscribe `off()` the Shared State change in `componentWillUnmount()`.
 
 ## Changelog
 
+`1.0.5`
+
+- Add reducers `arrayOp` and `setOp` to the reducer library and update docs accordingly
+- Underlying state object is now freezed in order to prevent modifications
+
 `1.0.4`
 
 - Add initializer function to the reducer argument of `createShared()`
@@ -228,7 +234,7 @@ and unsubscribe `off()` the Shared State change in `componentWillUnmount()`.
 
 `1.0.1`
 
-Initial release
+- Initial release
 
 ## License
 
