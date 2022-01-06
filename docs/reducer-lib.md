@@ -116,7 +116,6 @@ In this example we compose `arrayOp` reducer and `toLocalStorage()` reducer:
 import { toLocalStorage, arrayOp, ArrayOpInput, compose } from 'whoosh-react/reducers';
 import { createShared } from 'whoosh-react';
 
-
 const userGenres = createShared<string[], ArrayOpInput<string[]>>(
     [], compose(toLocalStorage('userPreferences.genres'), arrayOp)
 );

@@ -1,12 +1,14 @@
 # Whoosh TL;DR
 
-`npm install --save whoosh-react`
-
 [FULL version of the docs](readme.md)
 
 ## Why?
 
 Simple. Small.
+
+## Install
+
+`npm install --save whoosh-react`
 
 ## Examples
 
@@ -69,6 +71,15 @@ const addOne = () => appCounter.set({operation: 'add', arg: 1});
 <button onClick={addOne} > Add 1 </button>
 
 ```
+
+## Reducer library
+
+- [Reducer `toLocalStorage()`](docs/reducer-lib.md#reducer-tolocalstorage) - 
+saves/restores Shared State from/to the [`localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).
+- [Reducer `arrayOp` and `setOp`](docs/reducer-lib.md#reducer-arrayop-and-setop) - 
+adds operations `remove`, `add`, `filter` and `map` to `Array<S>` and `Set<S>` Shared State.
+- [Reducer composition](docs/reducer-lib.md#reducer-composition) - 
+compose two reducers into one
 
 ## API
 

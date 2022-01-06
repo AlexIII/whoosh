@@ -1,6 +1,5 @@
 /*
  * Whoosh - minimalistic react state manager that allows for shared state between components
- * Version: 1.0.0 alpha
  * Author: github.com/AlexIII
  * URL: https://github.com/AlexIII/whoosh
  * License: MIT
