@@ -9,9 +9,9 @@ The library is planned to be extended over time.
 - [Reducer `arrayOp` and `setOp`](#reducer-arrayop-and-setop)
 - [Reducer composition](#reducer-composition)
 
-## Reducer `toLocalStorage()`
+## Reducer* `toLocalStorage()`
 
-`toLocalStorage()` reducer stores Shared State value in the [`localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
+`toLocalStorage()` stores Shared State value in the [`localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
 and retrieves it on the startup.
 
 ```ts
@@ -48,6 +48,8 @@ const appCounter = createShared<Counter>(
     )
 );
 ```
+
+**Note, the function returned by the `toLocalStorage()` call is NOT a pure function, as it relies on side effects in the form of the `localStorage` object access. Exercise caution when using it with anything other than `createShared()`.*
 
 ## Reducer `arrayOp` and `setOp`
 
