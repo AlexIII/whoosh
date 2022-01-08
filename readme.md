@@ -18,6 +18,7 @@
 - [Reducer library](docs/reducer-lib.md) [separate file]
   - [Reducer `toLocalStorage()`](docs/reducer-lib.md#reducer-tolocalstorage)
   - [Reducer `arrayOp` and `setOp`](docs/reducer-lib.md#reducer-arrayop-and-setop)
+  - [Reducer `partialUpdate`](docs/reducer-lib.md#reducer-partialUpdate)
   - [Reducer composition](docs/reducer-lib.md#reducer-composition)
 - [Shared State object API](#shared-state-object-api)
 - [`createShared()` function API](#createshared-function-api)

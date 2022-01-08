@@ -7,6 +7,7 @@ The library is planned to be extended over time.
 ### Navigation
 - [Reducer `toLocalStorage()`](#reducer-tolocalstorage)
 - [Reducer `arrayOp` and `setOp`](#reducer-arrayop-and-setop)
+- [Reducer `partialUpdate`](#reducer-partialUpdate)
 - [Reducer composition](#reducer-composition)
 
 ## Reducer* `toLocalStorage()`
@@ -107,6 +108,32 @@ stateSet2.set(null); // stateSet1 cannot be null, but stateSet2 can
 Several operations can be used in the same call of `state.set()`, e.g. `state.set(filter: v => !!v, add: 'abc')`,
 but the order of the operations is predefined and as follows: `remove`, `filter`, `add`, `map`.
 
+## Reducer `partialUpdate`
+
+Allows for partial update of Shared State.
+
+```tsx
+import { partialUpdate } from 'whoosh-react/reducers';
+
+interface AppStyle {
+    theme: 'light' | 'dark';
+    fontSize: string;
+}
+
+const appStyle = createShared<AppStyle>(
+    {
+        theme: 'light',
+        fontSize: '1rem'
+    },
+    partialUpdate
+);
+
+//...
+
+appStyle.set({theme: 'dark'}); // Update `theme`. Other `appStyle` properties stay unchanged.
+appStyle.set({theme: 'dark'}); // Same value as before won't trigger the update at all.
+
+```
 
 ## Reducer composition
 
