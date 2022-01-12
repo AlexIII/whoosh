@@ -222,7 +222,17 @@ and unsubscribe `off()` the Shared State change in `componentWillUnmount()`.
 
 ## Changelog
 
+`1.0.8`
+
+- Improve `toLocalStorage()` typing
+
+`1.0.8`
+
+- Update docs
+- Add reducer partialUpdate
+
 `1.0.6`
+
 - Improve reducer-compose typing
 
 `1.0.5`

@@ -19,7 +19,7 @@ and retrieves it on the startup.
 import { toLocalStorage } from 'whoosh-react/reducers';
 import { createShared } from 'whoosh-react';
 
-const appCounter = createShared<number>(0, toLocalStorage('app.my.options.counter'));
+const appCounter = createShared<number>(0, toLocalStorage('app.options.counter'));
 ```
 
 If no value was saves to the `localStorage` previously, the Shared State will be initialized 
@@ -41,12 +41,27 @@ class Counter {
 const appCounter = createShared<Counter>(
     new Counter(),
     toLocalStorage(
-        'app.my.options.counter',
+        'app.options.counter',
         {
             toJSONable: counter => counter.value,
             fromJSONable: obj => new Counter(obj as number)
         }
     )
+);
+```
+
+If the typescript bugging you with the message
+
+```
+Index signature for type 'string' is missing in type '__YOUR_TYPE__'
+```
+
+but you SURE that your `__YOUR_TYPE__` is `JSONable`, you can suppress this check by passing `null` as the second parameter:
+
+```ts
+const appCounter = createShared<{ value: number; } | undefined>(
+    undefined,
+    toLocalStorage('app.options.counter', null)
 );
 ```
 
@@ -100,6 +115,7 @@ const stateSet2 = createShared<Set<string> | null, SetOpInput< Set<string> | nul
 
 // Valid calls of `set()`:
 stateSet1.set(new Set(['abc', '123']));
+stateSet1.set(['abc', '123']); // Array will be silently converted to Set
 stateSet1.set(prev => prev.has('abc')? {add: 'has-abc'} : {remove: '123'});
 
 stateSet2.set(null); // stateSet1 cannot be null, but stateSet2 can
