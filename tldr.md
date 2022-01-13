@@ -18,13 +18,17 @@ Simple. Small.
 
 ```jsx
 import { createShared } from 'whoosh-react';
+
+// `appCounter` is a Shared State that can be accessed from different components
 const appCounter = createShared(0); // 0 - initial value
 
+// Component that renders `appCounter` value
 const CounterValue = () => {
     const counter = appCounter.use(); // Hook returns current counter value
     return <p> { counter } </p>;
 };
 
+// Component that modifies `appCounter` value
 const CounterControls = () => {
     // Functions update counter state
     const reset = () => appCounter.set(0);

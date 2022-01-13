@@ -222,6 +222,10 @@ and unsubscribe `off()` the Shared State change in `componentWillUnmount()`.
 
 ## Changelog
 
+`1.0.9`
+
+- Improve `createShared()` typing
+
 `1.0.8`
 
 - Improve `toLocalStorage()` typing

@@ -19,11 +19,12 @@ type Reducer<S, A> = (previousState: S, input: A) => S;
 type ReducerAndInit<S, A, I> = [ Reducer<S, A>, (initArg: I) => S ];
 type ReducerOrReducerWithInit<S, A> = Reducer<S, A> | ReducerAndInit<S, A, S>;
 
+export function createShared<S>(): SharedState<S | undefined, S | undefined>;
 export function createShared<S>(initValue: S, reducer?: ReducerOrReducerWithInit<S, S>): SharedState<S, S>;
 export function createShared<S, A>(initValue: S, reducer: ReducerOrReducerWithInit<S, A>): SharedState<S, A>;
 export function createShared<S, A, I>(initValue: I, reducer: ReducerAndInit<S, A, I>): SharedState<S, A>;
 
-export function createShared(initValue: any, reducer?: ReducerOrReducerWithInit<any,any>): SharedState<any, any> {
+export function createShared(initValue?: any, reducer?: ReducerOrReducerWithInit<any,any>): SharedState<any, any> {
     const [_reducer, _initializer] = reducer instanceof Array? reducer : [reducer, (v: any) => v];
 
     let curState = Object.freeze(_initializer(initValue));      // Current state
