@@ -178,7 +178,8 @@ interface SharedState<S, A = S> {
 
 All other functions are plain js functions. They can be called from anywhere.
 
-- `get()` gets current Shared State value. It is not allowed to directly modify the returned value in any way. Use `set()` instead.
+- `get()` gets current Shared State value. Mutation of the returned value will modify the underlying Shared State value,
+ but won't trigger re-renders or calls of the subscribers.
 
 - `set()` updates Shared State value. Accepts either a new value or a function that accepts previous value and returns the new value. 
  The new value should be of type `S` if no reducer is passed to `createShared()` or of type `A` if there is.
@@ -221,6 +222,10 @@ But, if you have to support a class component, you can manually subscribe `on()`
 and unsubscribe `off()` the Shared State change in `componentWillUnmount()`.
 
 ## Changelog
+
+`1.0.10`
+
+- Remove freeze for the underlying state object. That was a bad idea...
 
 `1.0.9`
 
