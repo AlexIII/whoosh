@@ -62,7 +62,10 @@ export function createShared(initValue?: any, reducer?: ReducerOrReducerWithInit
         },
         use: () => {
             const [ hookState, hookSetState ] = React.useState(curState);
-            React.useEffect(() => shared.on(hookSetState), []);
+            React.useEffect(() => {
+                hookSetState(curState); // Update state, in case there were changes of `curState` between component render and this effect call
+                return shared.on(hookSetState);
+            }, []);
             return hookState;
         }
 

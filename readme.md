@@ -223,6 +223,10 @@ and unsubscribe `off()` the Shared State change in `componentWillUnmount()`.
 
 ## Changelog
 
+`1.0.11`
+
+- Fix rare bug of component no-update when SharedState changes between component first render and effect call
+
 `1.0.10`
 
 - Remove freeze for the underlying state object. That was a bad idea...
