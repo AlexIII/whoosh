@@ -96,6 +96,7 @@ interface SharedState<S, A = S> {
     use(): S;                                   // React Hook that returns current state value
     get(): S;                                   // Getter
     set(a: A | ((s: S) => A)): void;            // Setter / Dispatcher
+    setRaw(s: S): void;                         // Sets state bypassing reducer
     on(cb: (state: S) => void): () => void;     // Subscribe on the state change, returns unsubscribe function
     off(cb: (state: S) => void): void;          // Unsubscribe off the state change
 }

@@ -10,6 +10,7 @@ import * as React from 'react';
 export interface SharedState<S, A = S> {
     get(): S;                                   // Getter
     set(a: A | ((s: S) => A)): void;            // Setter / Dispatcher
+    setRaw(s: S): void;                         // Sets state bypassing reducer
     on(cb: (state: S) => void): () => void;     // Subscribe on change, returns unsubscribe function
     off(cb: (state: S) => void): void;          // Unsubscribe off change
     use(): S;                                   // React Hook
@@ -54,11 +55,12 @@ export function createShared(initValue?: any, reducer?: ReducerOrReducerWithInit
         get: () => curState,
         set: s => {
             const input = s instanceof Function? s(curState) : s;
-            const newState = _reducer? _reducer(curState, input) : input;
-            if(curState !== newState) {
-                curState = newState;
-                requestUpdate();
-            }
+            shared.setRaw(_reducer? _reducer(curState, input) : input);
+        },
+        setRaw: s => {
+            if(curState === s) return;
+            curState = s;
+            requestUpdate();
         },
         use: () => {
             const [ hookState, hookSetState ] = React.useState(curState);

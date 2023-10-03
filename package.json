@@ -1,7 +1,7 @@
 {
   "name": "whoosh-react",
-  "version": "1.0.11",
-  "description": "minimalistic React state manager",
+  "version": "1.0.12",
+  "description": "Minimalistic React state manager",
   "main": "whoosh.js",
   "types": "whoosh.d.ts",
   "files": [

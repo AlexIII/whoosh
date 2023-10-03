@@ -167,6 +167,7 @@ interface SharedState<S, A = S> {
     use(): S;                                   // React Hook that returns current state value
     get(): S;                                   // Getter
     set(a: A | ((s: S) => A)): void;            // Setter / Dispatcher
+    setRaw(s: S): void;                         // Sets state bypassing reducer
     on(cb: (state: S) => void): () => void;     // Subscribe on the state change, returns unsubscribe function
     off(cb: (state: S) => void): void;          // Unsubscribe off the state change
 }
@@ -185,6 +186,9 @@ All other functions are plain js functions. They can be called from anywhere.
  The new value should be of type `S` if no reducer is passed to `createShared()` or of type `A` if there is.
  (Of course, nothing prevents you having `S === A` which is a very useful case by itself.)
  The call of the function will trigger re-render of the components that are mounted and `use()` this Shared State.
+
+- `setRaw()` updates Shared State value bypassing the reducer completely. Can accept only the new value itself, not a function that produces the new value.
+ Primarily used for extensions and libraries. Direct usage from normal user code is not recommended. 
 
 - `on()` and `off()` allow to manually subscribe and unsubscribe to/from Shared State changes.
  See [Shared State Interaction](docs/shared-state-interaction.md) for usage example.
@@ -222,6 +226,10 @@ But, if you have to support a class component, you can manually subscribe `on()`
 and unsubscribe `off()` the Shared State change in `componentWillUnmount()`.
 
 ## Changelog
+
+`1.0.12`
+
+- Add `setRaw()` method to `SharedState`
 
 `1.0.11`
 
